@@ -1,0 +1,20 @@
+---
+- hosts: webserver
+  remote_user: root
+  strategy: free
+  become: yes
+  gather_facts: False
+  pre_tasks:
+    - name: Install python for Ansible
+      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+      changed_when: False
+
+    - name: run main.py
+      shell: cd /data/ip_location_sanic/src/ip_location_sanic/src && python3 main.py
+
+
+
+
+
+
+
