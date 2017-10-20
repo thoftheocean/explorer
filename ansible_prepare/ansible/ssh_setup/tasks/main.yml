@@ -1,0 +1,15 @@
+- name: Set up ssh keys - staging
+  authorized_key:
+    user: "{{ ansible_user }}"
+    key: "{{ lookup('pipe','cat ./ssh_setup/files/ssh_key_staging/*') }}"
+    state: present
+    exclusive: yes
+  when: stage == "staging"
+
+- name: Set up ssh keys - production
+  authorized_key:
+    user: "{{ ansible_user }}"
+    key: "{{ lookup('pipe','cat ./ssh_setup/files/ssh_key_production/*') }}"
+    state: present
+    exclusive: yes
+  when: stage == "production"

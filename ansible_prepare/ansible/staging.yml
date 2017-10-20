@@ -1,0 +1,27 @@
+---
+- hosts: webserver
+  strategy: free
+  tags: ansible
+  remote_user: root
+  become: yes
+  gather_facts: False
+  pre_tasks:
+    - name: install requirement tools for vultr
+      raw: apt install -y python-pip && apt install -y python-setuptools && pip install zip
+      changed_when: False
+    - name: Install python for Ansible
+      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+      changed_when: False
+  vars:
+    - hostname: ubuntu16.04
+  roles:
+    - {role: common, stage: staging}
+
+- hosts: all
+  strategy: free
+  tags: ssh_setup
+  remote_user: root
+  become: yes
+  gather_facts: false
+  roles:
+    - {role: ssh_setup, stage: staging}
